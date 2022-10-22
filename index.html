@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+</head>
+<body>
+    <div id="divv">
+        <input 
+            type="file" 
+            onchange="previewFile()" 
+            id="filepicker" 
+            name="fileList" 
+            accept="image/*"
+            webkitdirectory multiple />
+            Prefix Type:<input type="text" id="yourText">
+            <br />
+    </div>
+
+
+    <div id="imageContainer"></div>
+    
+</body>
+</html>
+<script>
+var container = document.getElementById('imageContainer');
+function previewFile() {
+  const files = document.getElementById('filepicker').files;
+  var fileTypes = ['jpg', 'jpeg', 'png']; 
+  var i=0;
+  var prefix = document.getElementById("yourText").value;
+  for (const file of files) {
+    var fileTypes = ['jpg', 'jpeg', 'png'];  //acceptable file types
+    var extension = file.name.split('.').pop().toLowerCase()
+    isSuccess = fileTypes.indexOf(extension) > -1; 
+    if (isSuccess){
+
+        var img = new Image();
+        if(prefix==""){
+            img.id=i+".PNG";
+            container.appendChild(img);
+            i++;
+        }else{
+            img.id=prefix+i+".PNG";
+            container.appendChild(img);
+            i++;
+        }
+
+    }
+  };
+
+  for (const file of files) {
+    var extension = file.name.split('.').pop().toLowerCase()
+    isSuccess = fileTypes.indexOf(extension) > -1; 
+    if (isSuccess){
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const fileimg = document.getElementById(file.name);
+            fileimg.src = reader.result;
+            fileimg.width = "600";
+            fileimg.height = "400";
+            fileimg.style.margin = "10px";
+            
+        }, false);
+        reader.readAsDataURL(file);
+    }
+  };
+
+
+  document.getElementById("divv").style.display ="none"
+}
+</script>
