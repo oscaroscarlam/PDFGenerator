@@ -5,17 +5,50 @@
 <title>JS Bin</title>
 </head>
 <body>
-    <div id="divv">
-        <input 
-            type="file" 
-            onchange="previewFile()" 
-            id="filepicker" 
-            name="fileList" 
-            accept="image/*"
-            webkitdirectory multiple />
-            Prefix Type:<input type="text" id="yourText">
-            <br />
-    </div>
+    <button onclick="myFunction('divv')">Reset</button>
+    <div id="divv" style="border-style: solid">
+            <h3>Config</h3>
+            <table>
+                <tr>
+                  <th>Prefix Type</th>
+                  <th>Suffix Type</th>
+                  <th>File Type</th>
+                </tr>
+                <tr>
+                  <td><input type="text" id="Prefix" oninput="preview()"></td>
+                  <td><input type="text" id="Suffix" oninput="preview()"></td>
+                  <td><input type="text" id="File" value="PNG" oninput="preview()"></td>
+                </tr>
+                <tr>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th>Margin</th>
+                  </tr>
+                  <tr>
+                    <td><input type="text" id="Width" value="600" oninput="IMGpreview()"></td>
+                    <td><input type="text" id="Height" value="400" oninput="IMGpreview()"></td>
+                    <td><input type="text" id="Margin" value="10" oninput="IMGpreview()"></td>
+                  </tr>
+                  <tr>
+                    <th>Folder Selection</th>
+                    <td colspan="2">
+                        <input 
+                        type="file" 
+                        onchange="previewFile()" 
+                        id="filepicker" 
+                        name="fileList" 
+                        accept="image/*"
+                        webkitdirectory multiple />
+                    </td>
+                  </tr>
+              </table>
+              <h3>Preview</h3>
+              <p id="demo"></p>
+              <input type='file' id="previewIMG" />
+              <br />
+             <img id="preViewImgTest"alt="selected image" />
+              <br />
+        </div>
 
 
     <div id="imageContainer"></div>
@@ -23,29 +56,27 @@
 </body>
 </html>
 <script>
-var container = document.getElementById('imageContainer');
+
 function previewFile() {
   const files = document.getElementById('filepicker').files;
   var fileTypes = ['jpg', 'jpeg', 'png']; 
   var i=0;
-  var prefix = document.getElementById("yourText").value;
+  var prefix = document.getElementById("Prefix").value;
+  var suffix = document.getElementById("Suffix").value;
+  var filetype = document.getElementById("File").value;
+  var width = document.getElementById("Width").value;
+  var height = document.getElementById("Height").value;
+  var margin = document.getElementById("Margin").value;
+  var container = document.getElementById('imageContainer');
   for (const file of files) {
     var fileTypes = ['jpg', 'jpeg', 'png'];  //acceptable file types
     var extension = file.name.split('.').pop().toLowerCase()
     isSuccess = fileTypes.indexOf(extension) > -1; 
     if (isSuccess){
-
         var img = new Image();
-        if(prefix==""){
-            img.id=i+".PNG";
-            container.appendChild(img);
-            i++;
-        }else{
-            img.id=prefix+i+".PNG";
-            container.appendChild(img);
-            i++;
-        }
-
+        img.id=prefix+i+suffix+"."+filetype;
+        container.appendChild(img);
+        i++;
     }
   };
 
@@ -57,16 +88,58 @@ function previewFile() {
         reader.addEventListener("load", () => {
             const fileimg = document.getElementById(file.name);
             fileimg.src = reader.result;
-            fileimg.width = "600";
-            fileimg.height = "400";
-            fileimg.style.margin = "10px";
+            fileimg.width = width;
+            fileimg.height = height;
+            fileimg.style.margin = margin+"px";
             
         }, false);
         reader.readAsDataURL(file);
     }
   };
-
-
   document.getElementById("divv").style.display ="none"
 }
+function myFunction(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === 'none') {
+    x.style.display = 'block';
+    document.getElementById("filepicker").value ="";
+  } else {
+    x.style.display = 'none';
+  }
+}
+
+function preview(){
+    var prefix = document.getElementById("Prefix").value;
+    var suffix = document.getElementById("Suffix").value;
+    var filetype = document.getElementById("File").value;
+    document.getElementById("demo").innerHTML="File Name Preview:<br>" ;
+    for (let i = 1; i < 11; i++) {
+        document.getElementById("demo").innerHTML += prefix+i+suffix+"."+filetype+"<br>";
+    }
+}
+
+function IMGpreview(){
+    var width = document.getElementById("Width").value;
+    var height = document.getElementById("Height").value;
+    var margin = document.getElementById("Margin").value;
+    const fileimg = document.getElementById("preViewImgTest");
+    fileimg.width = width;
+    fileimg.height = height;
+    fileimg.style.margin = margin+"px";
+
+}
+
+const imgInput = document.getElementById("previewIMG")
+const imgEl = document.querySelector('img')
+imgInput.addEventListener('change', () => {
+  if (imgInput.files && imgInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      imgEl.src = e.target.result;
+      imgEl.width = width;
+      imgEl.height = height;
+    }
+    reader.readAsDataURL(imgInput.files[0]);
+  }
+})
 </script>
