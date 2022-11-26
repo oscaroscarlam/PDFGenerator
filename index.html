@@ -13,11 +13,13 @@
                   <th>Prefix Type</th>
                   <th>Suffix Type</th>
                   <th>File Type</th>
+                  <th>File Name Preview</th>
                 </tr>
                 <tr>
                   <td><input type="text" id="Prefix" oninput="preview()"></td>
                   <td><input type="text" id="Suffix" oninput="preview()"></td>
                   <td><input type="text" id="File" value="PNG" oninput="preview()"></td>
+                  <td rowspan="4"><p id="demo" style="text-align:center"></p></td>
                 </tr>
                 <tr>
                     <th>Width</th>
@@ -43,10 +45,17 @@
                   </tr>
               </table>
               <h3>Preview</h3>
-              <p id="demo"></p>
-              <input type='file' id="previewIMG" />
-              <br />
-             <img id="preViewImgTest"alt="selected image" />
+              <table>
+                <tr>
+                    <td></td>
+                    <td>              
+                        <input type='file' id="previewIMG" />
+                        <br />
+                       <img id="preViewImgTest"alt="selected image" /></td>
+                </tr>
+              </table>
+              
+
               <br />
         </div>
 
@@ -112,9 +121,9 @@ function preview(){
     var prefix = document.getElementById("Prefix").value;
     var suffix = document.getElementById("Suffix").value;
     var filetype = document.getElementById("File").value;
-    document.getElementById("demo").innerHTML="File Name Preview:<br>" ;
+    document.getElementById("demo").innerHTML="";
     for (let i = 1; i < 11; i++) {
-        document.getElementById("demo").innerHTML += prefix+i+suffix+"."+filetype+"<br>";
+        document.getElementById("demo").innerHTML += prefix+"<strong>"+i+"</strong>"+suffix+"."+filetype+"<br>";
     }
 }
 
